@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8e8ec">
+  <title>Egy kis apróság neked</title>
+  <style>
+    :root {
+      --pink: #d994aa;
+      --pink-dark: #b96f89;
+      --rose: #f3d6df;
+      --cream: #fffaf4;
+      --ink: #795665;
+      --muted: #a98591;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255,255,255,.9), transparent 28%),
+        radial-gradient(circle at 85% 80%, rgba(255,255,255,.75), transparent 30%),
+        linear-gradient(145deg, #fff5f1, #f8e3eb 55%, #f7eee8);
+      overflow-x: hidden;
+    }
+    button { font: inherit; }
+    .petals {
+      position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
+    }
+    .petal {
+      position: absolute; top: -40px; opacity: .55;
+      animation: fall linear infinite;
+      color: #d99bb0; font-size: 18px;
+    }
+    @keyframes fall {
+      to { transform: translate3d(35px, 110vh, 0) rotate(360deg); }
+    }
+    .page {
+      position: relative; z-index: 1; width: min(100% - 32px, 760px);
+      margin: 0 auto; padding: 42px 0 60px; text-align: center;
+    }
+    .eyebrow {
+      text-transform: uppercase; letter-spacing: .22em; font: 11px Arial, sans-serif;
+      color: var(--muted); margin-bottom: 13px;
+    }
+    h1 {
+      color: var(--pink-dark); font-size: clamp(2rem, 7vw, 3.5rem);
+      font-weight: normal; margin: 0 0 12px;
+    }
+    .intro {
+      max-width: 490px; margin: 0 auto 28px; line-height: 1.8;
+      font-size: 1.05rem; color: #916f7d;
+    }
+    .panel {
+      background: rgba(255,250,246,.78); border: 1px solid rgba(255,255,255,.9);
+      border-radius: 28px; padding: clamp(20px, 5vw, 38px);
+      box-shadow: 0 18px 55px rgba(166,104,129,.13);
+      backdrop-filter: blur(8px);
+    }
+    .envelope-wrap { margin: 25px auto 10px; width: min(100%, 330px); }
+    .envelope {
+      position: relative; height: 205px; cursor: pointer; border: 0;
+      background: transparent; width: 100%; padding: 0;
+      perspective: 800px; display: block;
+    }
+    .env-back {
+      position: absolute; inset: 25px 12px 8px; border-radius: 12px;
+      background: linear-gradient(135deg, #eab9c9, #d994aa);
+      box-shadow: 0 12px 25px rgba(177,111,137,.2);
+    }
+    .env-front {
+      position: absolute; inset: 25px 12px 8px; overflow: hidden; border-radius: 12px;
+      background: linear-gradient(145deg, #f6d9e2, #e8b6c8);
+      clip-path: polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%);
+    }
+    .env-flap {
+      position: absolute; top: 25px; left: 12px; width: calc(100% - 24px); height: 116px;
+      background: #f8e5eb; clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top; transition: transform .8s ease; z-index: 3;
+      filter: drop-shadow(0 3px 3px rgba(150,90,115,.08));
+    }
+    .seal {
+      position: absolute; z-index: 4; top: 88px; left: 50%; transform: translateX(-50%);
+      width: 47px; height: 47px; border-radius: 50%; background: #fff5f3;
+      display: grid; place-items: center; color: #c47f98; font-size: 24px;
+      box-shadow: 0 3px 12px rgba(125,73,94,.15); transition: opacity .3s;
+    }
+    .env-label {
+      position: absolute; z-index: 2; left: 0; right: 0; bottom: 25px;
+      color: #fffaf8; font-size: 1.1rem; text-shadow: 0 1px 2px #b97891;
+    }
+    .envelope.open .env-flap { transform: rotateX(180deg); }
+    .envelope.open .seal { opacity: 0; }
+    .hint { font: 12px Arial, sans-serif; color: #b28b9a; margin-top: 5px; }
+    .hidden { display: none !important; }
+    .reveal { animation: rise .8s ease both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .record-stage {
+      display: flex; justify-content: center; align-items: center; gap: 24px;
+      flex-wrap: wrap; margin: 24px auto 18px;
+    }
+    .vinyl {
+      width: 205px; height: 205px; border-radius: 50%; position: relative;
+      background:
+        repeating-radial-gradient(circle, #242126 0 2px, #302c32 3px 4px, #211f24 5px 6px);
+      box-shadow: 0 12px 28px rgba(52,37,48,.25), inset 0 0 0 7px #171519;
+      display: grid; place-items: center;
+      animation: spin 4s linear infinite; animation-play-state: paused;
+    }
+    .vinyl.playing { animation-play-state: running; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .vinyl::before {
+      content: ""; position: absolute; inset: 13px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.13);
+    }
+    .label-disc {
+      width: 76px; height: 76px; border-radius: 50%; z-index: 1;
+      display: grid; place-items: center; text-align: center; line-height: 1.2;
+      color: #fff8f4; font: 9px Arial, sans-serif; letter-spacing: .08em;
+      background: radial-gradient(circle, #e8b5c6 0 7%, #c47d98 8% 68%, #f5dce4 69% 72%, #b86f89 73%);
+      box-shadow: 0 0 0 2px rgba(255,255,255,.15);
+    }
+    .tonearm {
+      width: 72px; height: 8px; background: linear-gradient(#e9d5d9,#a78b96);
+      border-radius: 8px; transform: rotate(-28deg); transform-origin: 90% 50%;
+      position: relative; margin-left: -10px; margin-top: -115px;
+      box-shadow: 0 2px 5px #bda5ad;
+    }
+    .tonearm::after {
+      content: ""; position: absolute; right: -3px; top: -4px; width: 15px; height: 15px;
+      border-radius: 4px; background: #a98b97;
+    }
+    .track-info { min-width: 190px; text-align: left; }
+    .track-kicker { font: 10px Arial,sans-serif; letter-spacing: .2em; color: #b18b99; }
+    .track-title { font-size: 1.55rem; color: #a95f7c; margin: 7px 0 4px; }
+    .track-artist { color: #9c7a88; font: 13px Arial,sans-serif; }
+    .player-controls { display: flex; justify-content: center; align-items: center; gap: 13px; margin: 12px 0; }
+    .play-btn {
+      border: 0; border-radius: 50%; width: 54px; height: 54px; cursor: pointer;
+      color: white; background: linear-gradient(145deg, #d99bb0, #bf7893);
+      box-shadow: 0 7px 18px rgba(183,112,139,.25); font-size: 20px;
+      transition: transform .2s;
+    }
+    .play-btn:hover { transform: scale(1.07); }
+    .small-btn {
+      border: 1px solid #ead1da; background: #fffaf7; color: #a9788c;
+      padding: 10px 15px; border-radius: 30px; cursor: pointer; font: 12px Arial,sans-serif;
+    }
+    .letter {
+      max-width: 520px; margin: 28px auto 0; padding: 26px;
+      background: #fffdf9; border: 1px solid #f0e2df; border-radius: 20px;
+      text-align: left; box-shadow: 0 8px 25px rgba(166,104,129,.08);
+    }
+    .letter h2 { text-align: center; font-weight: normal; color: #b96f89; margin: 0 0 18px; }
+    .letter p { line-height: 1.85; color: #896b78; }
+    .signoff { text-align: center; color: #b96f89 !important; font-style: italic; margin-top: 22px; }
+    @media (max-width: 520px) {
+      .track-info { text-align: center; }
+      .record-stage { gap: 8px; }
+      .tonearm { display: none; }
+      .vinyl { width: 185px; height: 185px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="petals" id="petals"></div>
+  <main class="page">
+    <h1>Készítettem neked valamit...</h1>
+    <p class="intro">Csak egy kis apróság tőlem</p>
+    <p>Kattints a borítékra</p>
+
+    <section class="panel" id="gift">
+      <div class="envelope-wrap" id="envelopeWrap">
+        <button class="envelope" id="envelope" aria-label="Boríték kinyitása">
+          <span class="env-back"></span>
+          <span class="env-front"></span>
+          <span class="env-flap"></span>
+          <span class="seal"></span>
+          <span class="env-label">From me to you</span>
+        </button>
+        <div class="hint">Nyisd ki :)</div>
+      </div>
+
+      <div id="surprise" class="hidden">
+        <div class="reveal">
+          <div class="record-stage">
+            <div class="vinyl" id="vinyl" aria-label="Forgó bakelitlemez">
+              <div class="label-disc">FIRE<br>WORK<br></div>
+            </div>
+            <div class="tonearm" aria-hidden="true"></div>
+            <div class="track-info">
+              <div class="track-title">FIREWORK</div>
+              <div class="track-artist">&TEAM</div>
+              <div class="player-controls">
+                <button class="play-btn" id="playBtn" aria-label="Lejátszás">▶</button>
+                <button class="small-btn" id="restartBtn">Újrakezdés ↺</button>
+              </div>
+            </div>
+          </div>
+          <audio id="audio" preload="auto">
+            <source src="firework.mp3" type="audio/mpeg">
+          </audio>
+
+          <article class="letter">
+            <h2>Lili!</h2>
+            <p>Csak szerettem volna, hogy tudd, mennyire örülök annak, hogy megismertelek.</p>
+            <p>Szeretem a beszélgetéseinket, a nevetéseidet és azt, hogy valahogy mindig tudsz mosolyt csalni az arcomra.</p>
+            <p>Egyszerűen csak szerettem volna készíteni neked valamit, amitől talán egy kicsit szebb lesz a napod.</p>
+            <p class="signoff">Remélem, most mosolyogsz.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const envelope = document.getElementById('envelope');
+    const envelopeWrap = document.getElementById('envelopeWrap');
+    const surprise = document.getElementById('surprise');
+    const audio = document.getElementById('audio');
+    const vinyl = document.getElementById('vinyl');
+    const playBtn = document.getElementById('playBtn');
+    const restartBtn = document.getElementById('restartBtn');
+
+    // Finoman hulló apró szívek és virágok
+    const petals = document.getElementById('petals');
+    const symbols = ['♡', '✿', '♥'];
+    for (let i = 0; i < 17; i++) {
+      const item = document.createElement('span');
+      item.className = 'petal';
+      item.textContent = symbols[i % symbols.length];
+      item.style.left = Math.random() * 100 + '%';
+      item.style.animationDuration = (12 + Math.random() * 13) + 's';
+      item.style.animationDelay = (-Math.random() * 20) + 's';
+      item.style.fontSize = (12 + Math.random() * 13) + 'px';
+      petals.appendChild(item);
+    }
+
+    function setPlaying(playing) {
+      vinyl.classList.toggle('playing', playing);
+      playBtn.textContent = playing ? 'Ⅱ' : '▶';
+      playBtn.setAttribute('aria-label', playing ? 'Szünet' : 'Lejátszás');
+    }
+
+    envelope.addEventListener('click', () => {
+      envelope.classList.add('open');
+      envelope.setAttribute('aria-expanded', 'true');
+
+      // A zene közvetlenül a kattintáskor indul, így a böngésző engedi
+      audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+
+      setTimeout(() => {
+        envelopeWrap.classList.add('hidden');
+        surprise.classList.remove('hidden');
+        surprise.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 650);
+    });
+
+    playBtn.addEventListener('click', async () => {
+      if (audio.paused) {
+        try {
+          await audio.play();
+          setPlaying(true);
+        } catch (error) {
+          setPlaying(false);
+        }
+      } else {
+        audio.pause();
+        setPlaying(false);
+      }
+    });
+
+    restartBtn.addEventListener('click', () => {
+      audio.currentTime = 0;
+      audio.play().then(() => setPlaying(true)).catch(() => {});
+    });
+
+    audio.addEventListener('ended', () => setPlaying(false));
+    audio.addEventListener('error', () => setPlaying(false));
+  </script>
+</body>
+</html>
