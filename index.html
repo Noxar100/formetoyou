@@ -2,203 +2,221 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#f8e8ec">
   <title>Egy kis apróság neked</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --pink: #d994aa;
-      --pink-dark: #b96f89;
-      --rose: #f3d6df;
-      --cream: #fffaf4;
-      --ink: #795665;
-      --muted: #a98591;
+      --rose: #d994aa;
+      --rose-d: #b96f89;
+      --ink: #7a5666;
+      --soft: #a98591;
+      --paper: #fffdf9;
+      --script: "Dancing Script", "Brush Script MT", cursive;
+      --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      --sans: -apple-system, "Segoe UI", Arial, sans-serif;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; }
     body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--ink);
-      font-family: Georgia, "Times New Roman", serif;
-      background:
-        radial-gradient(circle at 15% 15%, rgba(255,255,255,.9), transparent 28%),
-        radial-gradient(circle at 85% 80%, rgba(255,255,255,.75), transparent 30%),
-        linear-gradient(145deg, #fff5f1, #f8e3eb 55%, #f7eee8);
+      min-height: 100vh; min-height: 100dvh;
+      color: var(--ink); font-family: var(--serif);
+      background: linear-gradient(160deg, #fff6f2, #f9e4ec 55%, #f8eee9);
       overflow-x: hidden;
+      padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
     }
     button { font: inherit; }
-    .petals {
-      position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
-    }
-    .petal {
-      position: absolute; top: -40px; opacity: .55;
-      animation: fall linear infinite;
-      color: #d99bb0; font-size: 18px;
-    }
-    @keyframes fall {
-      to { transform: translate3d(35px, 110vh, 0) rotate(360deg); }
-    }
-    .page {
-      position: relative; z-index: 1; width: min(100% - 32px, 760px);
-      margin: 0 auto; padding: 42px 0 60px; text-align: center;
-    }
-    .eyebrow {
-      text-transform: uppercase; letter-spacing: .22em; font: 11px Arial, sans-serif;
-      color: var(--muted); margin-bottom: 13px;
-    }
+
+    /* Háttér: lágyan úszó fények és hulló szirmok */
+    .glow { position: fixed; border-radius: 50%; filter: blur(70px); opacity: .55; pointer-events: none; z-index: 0; }
+    .g1 { width: 320px; height: 320px; background: #f6c4d4; top: -90px; left: -90px; animation: drift 18s ease-in-out infinite alternate; }
+    .g2 { width: 360px; height: 360px; background: #ffe2cc; bottom: -110px; right: -110px; animation: drift 22s ease-in-out infinite alternate-reverse; }
+    @keyframes drift { to { transform: translate(40px, 30px) scale(1.12); } }
+    .petals { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+    .petal { position: absolute; top: -40px; opacity: .5; color: #d99bb0; animation: fall linear infinite; }
+    @keyframes fall { to { transform: translate3d(40px, 112vh, 0) rotate(360deg); } }
+
+    .page { position: relative; z-index: 1; width: min(100% - 32px, 640px); margin: 0 auto; padding: 44px 0 64px; text-align: center; }
+
     h1 {
-      color: var(--pink-dark); font-size: clamp(2rem, 7vw, 3.5rem);
-      font-weight: normal; margin: 0 0 12px;
+      font-family: var(--script); font-weight: 600; color: var(--rose-d);
+      font-size: clamp(2.6rem, 12vw, 4.2rem); line-height: 1.1; margin: 0 0 14px;
+      animation: rise 1s ease both;
     }
     .intro {
-      max-width: 490px; margin: 0 auto 28px; line-height: 1.8;
-      font-size: 1.05rem; color: #916f7d;
+      max-width: 420px; margin: 0 auto 30px; line-height: 1.55;
+      font-size: 1.3rem; font-style: italic; color: #8d6a79;
+      animation: rise 1s .15s ease both;
     }
     .panel {
-      background: rgba(255,250,246,.78); border: 1px solid rgba(255,255,255,.9);
-      border-radius: 28px; padding: clamp(20px, 5vw, 38px);
-      box-shadow: 0 18px 55px rgba(166,104,129,.13);
-      backdrop-filter: blur(8px);
+      background: rgba(255,251,248,.7); border: 1px solid rgba(255,255,255,.95);
+      border-radius: 32px; padding: clamp(22px, 6vw, 40px) clamp(16px, 5vw, 36px);
+      box-shadow: 0 24px 60px rgba(166,104,129,.16), inset 0 1px 0 #fff;
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      animation: rise 1s .3s ease both;
     }
-    .envelope-wrap { margin: 25px auto 10px; width: min(100%, 330px); }
+    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    .hidden { display: none !important; }
+
+    /* ---------- Boríték ---------- */
+    .envelope-wrap { width: min(100%, 320px); margin: 0 auto; padding-top: 4px; }
+    .hint-top { font: 600 11px var(--sans); letter-spacing: .24em; text-transform: uppercase; color: var(--soft); margin-bottom: 64px; }
+    .hint { font: 13px var(--sans); color: #b28b9a; margin-top: 26px; animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 50% { opacity: .45; } }
+
     .envelope {
-      position: relative; height: 205px; cursor: pointer; border: 0;
-      background: transparent; width: 100%; padding: 0;
-      perspective: 800px; display: block;
+      position: relative; display: block; width: 100%; height: 190px; padding: 0; border: 0;
+      background: none; cursor: pointer; animation: float 4.5s ease-in-out infinite;
     }
-    .env-back {
-      position: absolute; inset: 25px 12px 8px; border-radius: 12px;
-      background: linear-gradient(135deg, #eab9c9, #d994aa);
-      box-shadow: 0 12px 25px rgba(177,111,137,.2);
+    @keyframes float { 50% { transform: translateY(-7px); } }
+    .envelope.open { animation: none; cursor: default; }
+    .env-body {
+      position: absolute; inset: 30px 0 0; border-radius: 14px;
+      background: linear-gradient(160deg, #efc2d0, #d791a8);
+      box-shadow: 0 18px 34px rgba(177,111,137,.28);
+    }
+    .env-paper {
+      position: absolute; left: 7%; right: 7%; top: 44px; bottom: 16px; border-radius: 8px; z-index: 2;
+      background: repeating-linear-gradient(#fffdf9 0 17px, #f4e6e6 17px 18px);
+      box-shadow: 0 -2px 10px rgba(150,90,115,.12);
+      transition: transform .12s cubic-bezier(.2,.8,.2,1);
     }
     .env-front {
-      position: absolute; inset: 25px 12px 8px; overflow: hidden; border-radius: 12px;
-      background: linear-gradient(145deg, #f6d9e2, #e8b6c8);
-      clip-path: polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%);
+      position: absolute; inset: 30px 0 0; border-radius: 14px; z-index: 3;
+      background: linear-gradient(160deg, #f8dce5, #e6afc2);
+      clip-path: polygon(0 0, 50% 57%, 100% 0, 100% 100%, 0 100%);
     }
     .env-flap {
-      position: absolute; top: 25px; left: 12px; width: calc(100% - 24px); height: 116px;
-      background: #f8e5eb; clip-path: polygon(0 0, 100% 0, 50% 100%);
-      transform-origin: top; transition: transform .8s ease; z-index: 3;
-      filter: drop-shadow(0 3px 3px rgba(150,90,115,.08));
+      position: absolute; left: 0; right: 0; top: 30px; height: 91px; z-index: 4;
+      background: linear-gradient(#f9e7ed, #eec8d5);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top; transform: perspective(700px) rotateX(0deg);
+      transition: transform .12s ease-out, z-index 0s;
     }
     .seal {
-      position: absolute; z-index: 4; top: 88px; left: 50%; transform: translateX(-50%);
-      width: 47px; height: 47px; border-radius: 50%; background: #fff5f3;
-      display: grid; place-items: center; color: #c47f98; font-size: 24px;
-      box-shadow: 0 3px 12px rgba(125,73,94,.15); transition: opacity .3s;
+      position: absolute; z-index: 5; top: 96px; left: 50%; transform: translateX(-50%);
+      width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center;
+      color: #fbe5ec; font-size: 21px; line-height: 1;
+      background: radial-gradient(circle at 35% 30%, #d77c9a, #a8506f 75%);
+      box-shadow: 0 4px 10px rgba(110,45,70,.35), inset 0 -2px 4px rgba(90,30,55,.3), inset 0 2px 3px rgba(255,255,255,.25);
+      transition: opacity .08s;
     }
     .env-label {
-      position: absolute; z-index: 2; left: 0; right: 0; bottom: 25px;
-      color: #fffaf8; font-size: 1.1rem; text-shadow: 0 1px 2px #b97891;
+      position: absolute; z-index: 5; left: 0; right: 0; bottom: 20px;
+      font: 600 1.45rem var(--script); color: #fffaf8; text-shadow: 0 1px 3px rgba(150,70,100,.5);
     }
-    .envelope.open .env-flap { transform: rotateX(180deg); }
+    .envelope.open .env-flap { transform: perspective(700px) rotateX(180deg); z-index: 1; }
+    .envelope.open .env-paper { transform: translateY(-78px); }
     .envelope.open .seal { opacity: 0; }
-    .hint { font: 12px Arial, sans-serif; color: #b28b9a; margin-top: 5px; }
-    .hidden { display: none !important; }
-    .reveal { animation: rise .8s ease both; }
-    @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-    .record-stage {
-      display: flex; justify-content: center; align-items: center; gap: 24px;
-      flex-wrap: wrap; margin: 24px auto 18px;
-    }
+
+    /* ---------- Lejátszó ---------- */
+    .reveal { animation: rise .9s ease both; }
+    .turntable { position: relative; width: min(66vw, 250px); aspect-ratio: 1; margin: 6px auto 22px; }
     .vinyl {
-      width: 205px; height: 205px; border-radius: 50%; position: relative;
+      position: absolute; inset: 0; border-radius: 50%; display: grid; place-items: center;
       background:
-        repeating-radial-gradient(circle, #242126 0 2px, #302c32 3px 4px, #211f24 5px 6px);
-      box-shadow: 0 12px 28px rgba(52,37,48,.25), inset 0 0 0 7px #171519;
-      display: grid; place-items: center;
-      animation: spin 4s linear infinite; animation-play-state: paused;
+        conic-gradient(from 20deg, rgba(255,255,255,0) 0 8%, rgba(255,255,255,.10) 12%, rgba(255,255,255,0) 18% 58%, rgba(255,255,255,.08) 62%, rgba(255,255,255,0) 68%),
+        repeating-radial-gradient(circle, #232025 0 2px, #2e2a31 3px 4px, #1f1d22 5px 6px);
+      box-shadow: 0 16px 34px rgba(52,37,48,.32), inset 0 0 0 7px #161418;
+      animation: spin 5s linear infinite; animation-play-state: paused;
     }
-    .vinyl.playing { animation-play-state: running; }
+    .turntable.playing .vinyl { animation-play-state: running; box-shadow: 0 16px 38px rgba(52,37,48,.34), 0 0 38px rgba(217,148,170,.5), inset 0 0 0 7px #161418; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .vinyl::before {
-      content: ""; position: absolute; inset: 13px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,.13);
-    }
     .label-disc {
-      width: 76px; height: 76px; border-radius: 50%; z-index: 1;
-      display: grid; place-items: center; text-align: center; line-height: 1.2;
-      color: #fff8f4; font: 9px Arial, sans-serif; letter-spacing: .08em;
-      background: radial-gradient(circle, #e8b5c6 0 7%, #c47d98 8% 68%, #f5dce4 69% 72%, #b86f89 73%);
+      width: 34%; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; text-align: center;
+      font: 600 9px/1.25 var(--sans); letter-spacing: .14em; color: #fff8f4;
+      background: radial-gradient(circle, #f2dbe3 0 5%, #c47d98 6% 70%, #f5dce4 71% 74%, #b86f89 75%);
       box-shadow: 0 0 0 2px rgba(255,255,255,.15);
     }
-    .tonearm {
-      width: 72px; height: 8px; background: linear-gradient(#e9d5d9,#a78b96);
-      border-radius: 8px; transform: rotate(-28deg); transform-origin: 90% 50%;
-      position: relative; margin-left: -10px; margin-top: -115px;
-      box-shadow: 0 2px 5px #bda5ad;
+    .arm {
+      position: absolute; right: -14%; top: 6%; width: 62%; height: 7px; z-index: 2; border-radius: 8px;
+      background: linear-gradient(#f1e0e4, #a58a95); box-shadow: 0 3px 6px rgba(80,50,65,.28);
+      transform-origin: right center; transform: rotate(18deg); transition: transform .9s ease;
     }
-    .tonearm::after {
-      content: ""; position: absolute; right: -3px; top: -4px; width: 15px; height: 15px;
-      border-radius: 4px; background: #a98b97;
-    }
-    .track-info { min-width: 190px; text-align: left; }
-    .track-kicker { font: 10px Arial,sans-serif; letter-spacing: .2em; color: #b18b99; }
-    .track-title { font-size: 1.55rem; color: #a95f7c; margin: 7px 0 4px; }
-    .track-artist { color: #9c7a88; font: 13px Arial,sans-serif; }
-    .player-controls { display: flex; justify-content: center; align-items: center; gap: 13px; margin: 12px 0; }
+    .arm::before { content: ""; position: absolute; left: -4px; top: -4px; width: 17px; height: 15px; border-radius: 4px; background: #8f7482; }
+    .arm::after { content: ""; position: absolute; right: -10px; top: -9px; width: 25px; height: 25px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #f6e9ed, #9d8290); box-shadow: 0 2px 5px rgba(80,50,65,.3); }
+    .turntable.playing .arm { transform: rotate(-12deg); }
+
+    .track-title { font: 600 1.9rem var(--serif); letter-spacing: .06em; color: #a95f7c; margin: 0 0 2px; }
+    .track-artist { font: 13px var(--sans); letter-spacing: .12em; color: #9c7a88; }
+    .progress { width: min(100%, 260px); height: 4px; margin: 20px auto 0; border-radius: 4px; background: #efdbe2; cursor: pointer; position: relative; }
+    .progress span { display: block; height: 100%; width: 0; border-radius: 4px; background: linear-gradient(90deg, #e3a9bc, #bf7893); }
+    .player-controls { display: flex; justify-content: center; align-items: center; gap: 14px; margin: 20px 0 4px; }
     .play-btn {
-      border: 0; border-radius: 50%; width: 54px; height: 54px; cursor: pointer;
-      color: white; background: linear-gradient(145deg, #d99bb0, #bf7893);
-      box-shadow: 0 7px 18px rgba(183,112,139,.25); font-size: 20px;
+      width: 60px; height: 60px; border: 0; border-radius: 50%; cursor: pointer; color: #fff; font-size: 21px; line-height: 1;
+      background: linear-gradient(145deg, #e0a2b6, #bb7690);
+      box-shadow: 0 8px 20px rgba(183,112,139,.35), 0 0 0 6px rgba(217,148,170,.18);
       transition: transform .2s;
     }
-    .play-btn:hover { transform: scale(1.07); }
+    .play-btn:active { transform: scale(.94); }
     .small-btn {
-      border: 1px solid #ead1da; background: #fffaf7; color: #a9788c;
-      padding: 10px 15px; border-radius: 30px; cursor: pointer; font: 12px Arial,sans-serif;
+      border: 1px solid #ead1da; background: rgba(255,250,247,.9); color: #a9788c;
+      padding: 11px 17px; border-radius: 30px; cursor: pointer; font: 13px var(--sans);
     }
+
+    /* ---------- Levél ---------- */
     .letter {
-      max-width: 520px; margin: 28px auto 0; padding: 26px;
-      background: #fffdf9; border: 1px solid #f0e2df; border-radius: 20px;
-      text-align: left; box-shadow: 0 8px 25px rgba(166,104,129,.08);
+      position: relative; max-width: 500px; margin: 34px auto 0; padding: 34px 26px 24px;
+      background: repeating-linear-gradient(var(--paper) 0 33px, #f6ebe8 33px 34px);
+      border: 1px solid #f1e3e0; border-radius: 6px 6px 18px 18px; text-align: left;
+      box-shadow: 0 14px 34px rgba(166,104,129,.14), 0 2px 0 #fff inset;
     }
-    .letter h2 { text-align: center; font-weight: normal; color: #b96f89; margin: 0 0 18px; }
-    .letter p { line-height: 1.85; color: #896b78; }
-    .signoff { text-align: center; color: #b96f89 !important; font-style: italic; margin-top: 22px; }
-    @media (max-width: 520px) {
-      .track-info { text-align: center; }
-      .record-stage { gap: 8px; }
-      .tonearm { display: none; }
-      .vinyl { width: 185px; height: 185px; }
+    .letter::before {
+      content: ""; position: absolute; top: -13px; left: 50%; width: 92px; height: 26px; transform: translateX(-50%) rotate(-2deg);
+      background: rgba(238,188,205,.65); box-shadow: 0 1px 3px rgba(150,90,115,.15);
+    }
+    .letter p {
+      margin: 0 0 34px; font-size: 1.28rem; line-height: 34px; font-weight: 500; color: #7f5f6e;
+      opacity: 0; animation: rise .9s ease forwards;
+    }
+    .letter p:nth-child(1) { animation-delay: .9s; }
+    .letter p:nth-child(2) { animation-delay: 1.6s; }
+    .letter p:nth-child(3) { animation-delay: 2.3s; }
+    .letter .signoff { text-align: center; margin: 0; font: 600 1.45rem/34px var(--script); white-space: nowrap; color: var(--rose-d); animation-delay: 3s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01s !important; animation-delay: 0s !important; transition-duration: .01s !important; }
     }
   </style>
 </head>
 <body>
+  <div class="glow g1"></div><div class="glow g2"></div>
   <div class="petals" id="petals"></div>
+
   <main class="page">
     <h1>Hey beautiful 🌷</h1>
     <p class="intro">Nem akartam nagy dolgot csinálni, csak szerettem volna megmutatni mennyit jelentesz nekem.</p>
-    <p>Kattints a borítékra</p>
 
-    <section class="panel" id="gift">
+    <section class="panel">
       <div class="envelope-wrap" id="envelopeWrap">
+        <div class="hint-top">Kattints a borítékra</div>
         <button class="envelope" id="envelope" aria-label="Boríték kinyitása">
-          <span class="env-back"></span>
+          <span class="env-body"></span>
+          <span class="env-paper"></span>
           <span class="env-front"></span>
           <span class="env-flap"></span>
-          <span class="seal"></span>
+          <span class="seal">♥</span>
           <span class="env-label">From me to you</span>
         </button>
-        <div class="hint">Nyisd ki :)</div>
       </div>
 
       <div id="surprise" class="hidden">
         <div class="reveal">
-          <div class="record-stage">
-            <div class="vinyl" id="vinyl" aria-label="Forgó bakelitlemez">
-              <div class="label-disc">FIRE<br>WORK<br></div>
+          <div class="turntable" id="turntable">
+            <div class="vinyl" aria-label="Forgó bakelitlemez">
+              <div class="label-disc"><span>FIRE<br>WORK</span></div>
             </div>
-            <div class="tonearm" aria-hidden="true"></div>
-            <div class="track-info">
-              <div class="track-title">FIREWORK</div>
-              <div class="track-artist">&TEAM</div>
-              <div class="player-controls">
-                <button class="play-btn" id="playBtn" aria-label="Lejátszás">▶</button>
-                <button class="small-btn" id="restartBtn">Újrakezdés ↺</button>
-              </div>
-            </div>
+            <div class="arm" aria-hidden="true"></div>
+          </div>
+          <div class="track-title">FIREWORK</div>
+          <div class="track-artist">&amp;TEAM</div>
+          <div class="progress" id="progress"><span id="bar"></span></div>
+          <div class="player-controls">
+            <button class="play-btn" id="playBtn" aria-label="Lejátszás">▶</button>
+            <button class="small-btn" id="restartBtn">Újrakezdés ↺</button>
           </div>
           <audio id="audio" preload="auto">
             <source src="firework.mp3" type="audio/mpeg">
@@ -220,14 +238,16 @@
     const envelopeWrap = document.getElementById('envelopeWrap');
     const surprise = document.getElementById('surprise');
     const audio = document.getElementById('audio');
-    const vinyl = document.getElementById('vinyl');
+    const turntable = document.getElementById('turntable');
     const playBtn = document.getElementById('playBtn');
     const restartBtn = document.getElementById('restartBtn');
+    const bar = document.getElementById('bar');
+    const progress = document.getElementById('progress');
 
-    // Finoman hulló apró szívek és virágok
+    // Hulló szívek és virágok
     const petals = document.getElementById('petals');
     const symbols = ['♡', '✿', '♥'];
-    for (let i = 0; i < 17; i++) {
+    for (let i = 0; i < 16; i++) {
       const item = document.createElement('span');
       item.className = 'petal';
       item.textContent = symbols[i % symbols.length];
@@ -239,12 +259,13 @@
     }
 
     function setPlaying(playing) {
-      vinyl.classList.toggle('playing', playing);
+      turntable.classList.toggle('playing', playing);
       playBtn.textContent = playing ? 'Ⅱ' : '▶';
       playBtn.setAttribute('aria-label', playing ? 'Szünet' : 'Lejátszás');
     }
 
     envelope.addEventListener('click', () => {
+      if (envelope.classList.contains('open')) return;
       envelope.classList.add('open');
       envelope.setAttribute('aria-expanded', 'true');
 
@@ -255,20 +276,14 @@
         envelopeWrap.classList.add('hidden');
         surprise.classList.remove('hidden');
         surprise.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 650);
+      }, 100);
     });
 
     playBtn.addEventListener('click', async () => {
       if (audio.paused) {
-        try {
-          await audio.play();
-          setPlaying(true);
-        } catch (error) {
-          setPlaying(false);
-        }
+        try { await audio.play(); setPlaying(true); } catch (e) { setPlaying(false); }
       } else {
-        audio.pause();
-        setPlaying(false);
+        audio.pause(); setPlaying(false);
       }
     });
 
@@ -277,7 +292,15 @@
       audio.play().then(() => setPlaying(true)).catch(() => {});
     });
 
-    audio.addEventListener('ended', () => setPlaying(false));
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+    });
+    progress.addEventListener('click', (e) => {
+      if (!audio.duration) return;
+      const r = progress.getBoundingClientRect();
+      audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
+    });
+    audio.addEventListener('ended', () => { setPlaying(false); bar.style.width = '0'; });
     audio.addEventListener('error', () => setPlaying(false));
   </script>
 </body>
